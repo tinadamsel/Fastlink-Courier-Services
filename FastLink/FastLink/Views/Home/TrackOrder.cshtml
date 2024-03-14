@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "TrackOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header" style="margin-bottom: 2rem;">
+    <div class="container py-5">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Track Order</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Track you Order</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+<!-- Quote Start -->
+<div class="container-xxl py-5">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="text-secondary text-uppercase mb-3"> Tracking</h6>
+                <h1 class="mb-5">Track Your Order!</h1>
+                <p class="mb-5">By entering your tracking Id, you can track the present location of your goods/ consignments. </p>
+                <div class="d-flex align-items-center">
+                    <i class="fa fa-headphones fa-2x flex-shrink-0 bg-primary p-3 text-white"></i>
+                    <div class="ps-4">
+                        <h6>Call for any query!</h6>
+                        <h3 class="text-primary m-0"> +18404654212</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="bg-light text-center p-5 wow fadeIn" data-wow-delay="0.5s">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-12 form-group">
+                                <input type="text" class="form-control border-0" placeholder="Your Tracking ID" id="track_Id" style="height: 55px;">
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary w-100 py-3" data-toggle="modal" data-target="#showLocation"
+                                         id="submit-btn" onclick="GetCurrentLocation()">
+                                        Track Location
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Quote End -->
+
+<!-- Add  Modal -->
+
+<div class="modal fade" id="showLocation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> <b> Your Goods/Consignment is currently at: </b> </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center" style="font-weight:700 ;" id="location_para">
+                        @*<input class="form-control" hidden type="text" id="t_Id">*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Add Modal -->

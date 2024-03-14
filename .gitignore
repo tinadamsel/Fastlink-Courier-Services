@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/FastLink/Core/bin/Debug/net6.0
+/FastLink/Core/obj/Debug/net6.0/refint
+/FastLink/Core/obj/Debug/net6.0/ref
+/FastLink/Core/obj/Debug/net6.0
+/FastLink/Core/obj
+/FastLink/FastLink/bin/Debug/net6.0
+/FastLink/FastLink/obj
+/FastLink/Logic/bin/Debug/net6.0
+/FastLink/Logic/obj/Debug/net6.0
+/FastLink/Logic/obj

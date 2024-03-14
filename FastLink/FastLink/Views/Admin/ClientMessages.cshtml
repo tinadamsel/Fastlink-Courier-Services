@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Core.ViewModels.ContactViewModel>
+@{
+    ViewData["Title"] = "Client Messages";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+    int count = 1;
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="mt-3"> Client Messages </h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item mt-3 mb-2"><a href="">Home </a></li>
+                <li class="breadcrumb-item active mt-3 mb-2"> Client Messages </li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Recent Sales -->
+                <div class="col-12">
+                    <div class="recent-sales overflow-auto" style="font-size: 0.9em !important;">
+
+                        <div class="mt-4">
+
+                            <table class="table table-borderless table-striped table-hover datatable">
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th hidden></th>
+                                            <th scope="col">S/NO</th>
+                                            <th scope="col">Client Name</th>
+                                            <th scope="col">Client Email</th>
+                                            <th scope="col">Subject</th>
+                                            <th scope="col"> Date Sent </th>
+                                            <th scope="col">Message</th>
+                                            <th scope="col"> Actions </th>
+                                        </tr>
+                                    </thead>
+                                }
+                                <tbody>
+                                    @foreach (var msg in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row" hidden></th>
+                                            <td>@count</td>
+                                            <td>@msg.Name</td>
+                                            <td>@msg.ClientEmail</td>
+                                            <td>@msg.Subject</td>
+                                            <td>@msg.DateCreated.ToString("D")</td>
+                                            <td style="display: flex;">
+                                                <button class="btn btn-outline-success" data-toggle="modal" data-target="#getMsgModal"
+                                                    type="button" style="margin: 5px; border-radius: 10px" onclick="GetMsg('@msg.Id')">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-success" data-toggle="modal" data-target="#delete_Msg"
+                                                    type="button" style="margin: 5px;" onclick="DeleteMsg('@msg.Id')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        count++;
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div><!-- End Recent Sales -->
+
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+
+
+<!-- Add Modal -->
+
+<div class="modal fade" id="getMsgModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <b> Contact Message </b> </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @*<input class="form-control" hidden type="text" id="msg_Id">*@
+                        <textarea cols="5" rows="5" class="form-control" type="text" id="msg" readonly> </textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /Add Modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete_Msg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <b> Delete Contact Message </b> </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Are you sure you want to delete?</p>
+                <div class="modal-btn delete-action">
+                    <div class="row m-auto">
+                        <input class="form-control" hidden type="text" id="msg_Id">
+                        <div class="col-6">
+                            <a class="btn btn-outline-success rounded-pill p-2 d-block" onclick="DeleteMessage()">Delete</a>
+                        </div>
+                        <div class="col-6">
+                            <a data-bs-dismiss="modal" aria-label="Close" class="btn btn-outline-success rounded-pill p-2 d-block">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Modal -->
