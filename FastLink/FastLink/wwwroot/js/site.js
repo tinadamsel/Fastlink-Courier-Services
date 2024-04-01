@@ -98,28 +98,31 @@ function GetCurrentLocation() {
     if (TrackingID != "") {
         $.ajax({
             type: 'GET',
-            url: '/Admin/GetCurrentLocation',
-            dataType: 'json',
+            url: '/Home/GetCurrentLocation',
             data:
             {
                 trackingID: TrackingID,
             },
-            success: function (result) {
-                if (!result.isError) {
-                    var url = '/Home/TrackOrder'
-                    successAlertWithRedirect(result.msg, url)
-
-                    //var location = result;
-                    //var locationHtml = `<p class="lead" style="font-weight:700;"> ${location} </p>`;
-                    //$('#location_para').append(locationHtml);
-                    //$("#showLocation").modal('show');
-                } else {
-                    errorAlert(result.msg)
-                }
+            success: function (data) {
+                $('#track_details').html(data);
+                $('#showLocation').modal("show");
             },
-            error: function (ex) {
-                errorAlert(result.msg);
-            }
+            //success: function (result) {
+            //    if (!result.isError) {
+            //        var url = '/Home/TrackOrder'
+            //        successAlertWithRedirect(result.msg, url)
+
+            //        //var location = result;
+            //        //var locationHtml = `<p class="lead" style="font-weight:700;"> ${location} </p>`;
+            //        //$('#location_para').append(locationHtml);
+            //        //$("#showLocation").modal('show');
+            //    } else {
+            //        errorAlert(result.msg)
+            //    }
+            //},
+            //error: function (ex) {
+            //    errorAlert(result.msg);
+            //}
         });
     } else {
         errorAlert("Please input your Tracking ID");
@@ -150,10 +153,17 @@ function GetLocationToUpdate(id,trackID) {
 }
 
 function ChangeLocation() {
-    var NewLocation = $("#newLocation").val();
+    debugger
+    var data = {};
+
+    data.NewLocation = $("#newLocation").val();
+    data.DepatureDate = $("#departDate").val();
+    data.ArrivalDate = $("#arriveDate").val();
+
     var id = $("#tr_Id").val();
     var Track_ID = $("#track_ID").val();
-    if (NewLocation != "") {
+    if (data.NewLocation != "" && (data.DepatureDate != "" || data.ArrivalDate != "")) {
+        let details = JSON.stringify(data);
         $.ajax({
             type: 'POST',
             url: '/Admin/ChangeCurrentLocation',
@@ -161,9 +171,10 @@ function ChangeLocation() {
             data: {
                 id: id,
                 trackID: Track_ID,
-                newLocation: NewLocation,
+                details: details,
             },
             success: function (result) {
+                debugger
                 if (!result.isError) {
                     var url = '/Admin/ChangeLocation';
                     successAlertWithRedirect(result.msg, url);
@@ -315,3 +326,104 @@ function DeleteMessage() {
 }
 
 //add the msg response later
+
+// newly added for pause and delivered
+
+function setToDeliveredTrack(id) {
+    debugger
+    $.ajax({
+        type: 'Post',
+        dataType: 'Json',
+        url: '/Admin/DeliverTrack',
+        data: {
+            id: id
+        },
+        success: function (result) {
+            debugger
+            if (!result.isError) {
+                var url = '/Admin/ChangeLocation'
+                successAlertWithRedirect(result.msg, url)
+            }
+            else {
+                errorAlert(result.msg)
+            }
+        },
+        error: function (ex) {
+            errorAlert("An error occured, please check and try again. Please contact admin if issue persists..");
+        }
+    })
+}
+
+function pauseTrackModal(id) {
+    debugger;
+    $("#ps_Id").val(id);
+    $("#pause_order").modal('show');
+}
+
+function PauseOrder() {
+    debugger
+    var id = $('#ps_Id').val();
+    $.ajax({
+        type: 'Post',
+        dataType: 'Json',
+        url: '/Admin/PauseOrder',
+        data: {
+            id: id
+        },
+        success: function (result) {
+            debugger
+            if (!result.isError) {
+                var url = '/Admin/ChangeLocation'
+                successAlertWithRedirect(result.msg, url)
+            }
+            else {
+                errorAlert(result.msg)
+            }
+        },
+        error: function (ex) {
+            errorAlert("An error occured, please check and try again. Please contact admin if issue persists..");
+        }
+    })
+}
+
+function removePause(id) {
+    debugger
+    $.ajax({
+        type: 'Post',
+        dataType: 'Json',
+        url: '/Admin/RemovePause',
+        data: {
+            id: id
+        },
+        success: function (result) {
+            debugger
+            if (!result.isError) {
+                var url = '/Admin/ChangeLocation'
+                successAlertWithRedirect(result.msg, url)
+            }
+            else {
+                errorAlert(result.msg)
+            }
+        },
+        error: function (ex) {
+            errorAlert("An error occured, please check and try again. Please contact admin if issue persists..");
+        }
+    })
+}
+
+function GetTrackDetails(id) {
+    $.ajax({
+        type: 'GET',
+        url: '/Home/GetCurrentLocation',
+        data:
+        {
+            trackingID: id,
+        },
+        success: function (data) {
+            $('#track_details').html(data);
+            $('#showLocation').modal("show");
+        },
+    });
+    
+}
+

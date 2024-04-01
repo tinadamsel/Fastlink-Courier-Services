@@ -18,6 +18,10 @@ namespace Core.Models
 		public string? ItemWeight { get; set; }
 		public string? NewLocation { get; set; }
 		public string TrackingID { get; set; }
+		public bool? IsPaused { get; set; }
+		public bool? IsDelivered { get; set; }
+		public string? DepatureDate { get; set; }
+		public string? ArrivalDate { get; set; }
 
 	}
 }

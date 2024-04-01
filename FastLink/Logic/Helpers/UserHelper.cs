@@ -89,6 +89,10 @@ namespace Logic.Helpers
                 ItemName = a.ItemName,
                 ItemWeight = a.ItemWeight,
                 NewLocation = a.NewLocation,
+                IsPaused = a.IsPaused,
+                ArrivalDate = a.ArrivalDate,
+                DepatureDate = a.DepatureDate,
+                IsDelivered = a.IsDelivered,
             }).OrderByDescending(a => a.DateCreated).ToList();
 
             return trackViewModel;
@@ -139,16 +143,32 @@ namespace Logic.Helpers
             return caseNumber;
         }
 
-        public string GetCurrentLocation(string trackingID)
+        public TrackingViewModel GetCurrentLocation(string trackingID)
         {
             if (trackingID != null)
             {
-                var getLocation = _context.Trackings.Where(a => a.TrackingID == trackingID && a.Active && !a.Deleted).FirstOrDefault();
-                if (getLocation != null)
-                {
-                    return getLocation?.NewLocation;
-                }
-            }
+				var trackingViewModel = new TrackingViewModel();
+                    trackingViewModel = _context.Trackings.Where(a => a.TrackingID == trackingID && a.Active && !a.Deleted).Select(a => new TrackingViewModel
+                    {
+                        TrackingID = a.TrackingID,
+                        Active = a.Active,
+                        Deleted = a.Deleted,
+                        ItemName = a.ItemName,
+                        ItemWeight = a.ItemWeight,
+                        Address = a.Address,
+                        CurrentCity = a.CurrentCity,
+                        CurrentLocation = a.CurrentLocation,
+                        NewLocation = a.NewLocation,
+                        Phonenumber = a.Phonenumber,
+                        Id = a.Id,
+                        DateCreated = a.DateCreated,
+                        IsPaused = a.IsPaused,
+                        ArrivalDate = a.ArrivalDate,
+                        DepatureDate = a.DepatureDate,
+                        IsDelivered = a.IsDelivered,
+                    }).FirstOrDefault();
+                return trackingViewModel;
+			}
             return null;
         }
         public Tracking GetLocationToUpdate(int id, string trackingID)
@@ -160,12 +180,15 @@ namespace Logic.Helpers
             }
             return null;
         }
-        public bool ChangeCurrentLocation(int id, string trackID, string newLocation)
+        public bool ChangeCurrentLocation(int id, string trackID, TrackingViewModel trackViewModel)
         {
             var updateLocation = _context.Trackings.Where(b => b.Id == id && b.TrackingID == trackID && b.Active && !b.Deleted).FirstOrDefault();
             if (updateLocation != null)
             {
-                updateLocation.NewLocation = newLocation;
+                updateLocation.NewLocation = trackViewModel.NewLocation;
+                updateLocation.DepatureDate = trackViewModel.DepatureDate;
+                updateLocation.ArrivalDate = trackViewModel.ArrivalDate;
+                
                 _context.Trackings.Update(updateLocation);
                 _context.SaveChanges();
                 return true;
@@ -304,6 +327,74 @@ namespace Logic.Helpers
             }
             return false;
         }
+
+        //newly added
+        public bool CheckIfPaused(int id)
+        {
+            if (id > 0)
+            {
+                var check = _context.Trackings.Where(x => x.Id == id && x.Active && !x.Deleted && x.IsPaused == true).FirstOrDefault();
+                if (check != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CheckIfDelivered(int id)
+        {
+            if (id > 0)
+            {
+                var check = _context.Trackings.Where(x => x.Id == id && x.Active && !x.Deleted && x.IsDelivered == true).FirstOrDefault();
+                if (check != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DeliverTrack(int id)
+        {
+            var deliver = _context.Trackings.Where(b => b.Id == id && b.Active && !b.Deleted && b.IsPaused != true).FirstOrDefault();
+            if (deliver != null)
+            {
+                deliver.IsDelivered = true;
+                _context.Update(deliver);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool PauseOrder(int id)
+        {
+            var pause = _context.Trackings.Where(b => b.Id == id && b.Active && !b.Deleted && b.IsDelivered != true).FirstOrDefault();
+            if (pause != null)
+            {
+                pause.IsPaused = true;
+                _context.Update(pause);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemovePauseOrder(int id)
+        {
+            var pause = _context.Trackings.Where(b => b.Id == id && b.Active && !b.Deleted && b.IsDelivered != true && b.IsPaused == true).FirstOrDefault();
+            if (pause != null)
+            {
+                pause.IsPaused = false;
+                _context.Update(pause);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+
 
     }
 }

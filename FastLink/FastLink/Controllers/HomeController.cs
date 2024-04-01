@@ -80,6 +80,41 @@ namespace FastLink.Controllers
             return Json(new { isError = true, msg = "Username and Password Required" });
         }
 
+        //[HttpGet]
+        //public JsonResult GetCurrentLocation(string trackingID)
+        //{
+        //    if (trackingID != null)
+        //    {
+        //        var location = _userHelper.GetCurrentLocation(trackingID);
+        //        if (location != null)
+        //        {
+
+        //            return Json(new { isError = false, msg = " Your Goods/Consignment is currently at " + location + ". Thank you for choosing us." });
+        //        }
+        //        return Json(new { isError = true, msg = " Your item is yet to be moved, Please exercise some patience. Thank you" });
+        //    }
+        //    return Json( new { isError = true, msg = "Tracking ID not found"});
+        //}
+
+        [HttpGet]
+        public IActionResult GetCurrentLocation(string trackingID)
+        {
+            try
+            {
+                if (trackingID != null)
+                {
+                    var trackDetails = _userHelper.GetCurrentLocation(trackingID);
+                    return PartialView(trackDetails);
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {

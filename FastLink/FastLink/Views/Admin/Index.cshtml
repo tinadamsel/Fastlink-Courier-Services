@@ -21,7 +21,7 @@
                 <div class="row">
 
                     <!-- Sales Card -->
-                    <div class="col-xxl-4 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card info-card sales-card">
 
                             @*<div class="filter">
@@ -54,7 +54,7 @@
                     </div><!-- End Sales Card -->
                     
                     <!-- Message Card -->
-                    <div class="col-xxl-4 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card info-card sales-card">
                             <div class="card-body">
                                 <h5 class="card-title"> Messages Recieved </h5>
@@ -73,7 +73,7 @@
                     </div><!-- End Sales Card -->
                     
                     <!-- Customers Card -->
-                    <div class="col-xxl-4 col-md-6">
+                    <div class="col-xl-4 col-md-6">
                         <div class="card info-card sales-card">
                             <div class="card-body">
                                 <h5 class="card-title"> Clients </h5>
@@ -100,7 +100,7 @@
                             </div>
                             @if (Model?.TrackIds?.Count() > 0)
                             {
-                                <div class="card-body">
+                                <div class="card-body" style="font-size:small;">
                                     <div class="table-responsive">
                                         <table class="table custom-table table-nowrap mb-0">
                                             <thead>
@@ -139,7 +139,7 @@
                             </div>
                             @if (Model?.Messages?.Count() > 0)
                             {
-                                <div class="card-body">
+                                <div class="card-body" style="font-size:small;">
                                     <div class="table-responsive">
                                         <table class="table custom-table table-nowrap mb-0">
                                             <thead>

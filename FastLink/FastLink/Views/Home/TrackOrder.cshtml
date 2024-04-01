@@ -41,8 +41,8 @@
                                 <input type="text" class="form-control border-0" placeholder="Your Tracking ID" id="track_Id" style="height: 55px;">
                             </div>
                             <div class="col-12">
-                                <button type="button" class="btn btn-primary w-100 py-3" data-toggle="modal" data-target="#showLocation"
-                                         id="submit-btn" onclick="GetCurrentLocation()">
+                                <button type="button" class="btn btn-primary w-100 py-3"
+                                          onclick="GetCurrentLocation()">
                                         Track Location
                                 </button>
                             </div>
@@ -55,23 +55,23 @@
 </div>
 <!-- Quote End -->
 
-<!-- Add  Modal -->
-
+<!-- Modal -->
 <div class="modal fade" id="showLocation" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"> <b> Your Goods/Consignment is currently at: </b> </h4>
+                <h6 class="modal-title"> <b> Goods/Consignment Status </b> </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-12 text-center" style="font-weight:700 ;" id="location_para">
-                        @*<input class="form-control" hidden type="text" id="t_Id">*@
+                    <div class="col-sm-12">
+                        <div class="mt-2" id="track_details">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- /Add Modal -->
+<!-- /Modal -->

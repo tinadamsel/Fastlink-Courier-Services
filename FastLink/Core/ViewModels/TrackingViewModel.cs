@@ -23,5 +23,10 @@ namespace Core.ViewModels
 		public DateTime DateCreated { get; set; }
 		public bool Active { get; set; }
 		public bool Deleted { get; set; }
-	}
+        public bool? IsPaused { get; set; }
+        public string? DepatureDate { get; set; }
+        public string? ArrivalDate { get; set; }
+        public bool? IsDelivered { get; set; }
+
+    }
 }

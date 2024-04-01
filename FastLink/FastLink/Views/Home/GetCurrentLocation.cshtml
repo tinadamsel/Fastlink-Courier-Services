@@ -1,0 +1,86 @@
+﻿@model Core.ViewModels.TrackingViewModel
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+    @* <h5 class="mt-3 mb-4 font-weight-bold text-center text-white"> Edit Member Details </h5> *@
+    <input class="form-control" id="track_Id" value="@Model?.Id" hidden type="text">
+    
+    <div class="row p-3 mt-2">
+        
+        <div class="col-sm-6">
+            <h6> Item Name: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.ItemName </p>
+            @* <input class="form-control p-3" id="edited_lName" value="@Model?.LastName" type="text"> *@
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Item Weight: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.ItemWeight </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Tracking ID: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.TrackingID </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Address: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.Address </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Current Location: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.NewLocation </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Phone Number: </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.Phonenumber </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Order Status:  </h6>
+        </div>
+        <div class="col-sm-6">
+            @if (Model?.IsPaused == true)
+            {
+                <p class="btn btn-danger p-1 rounded"> Order Paused </p>
+            }
+            else if (Model?.IsDelivered == true)
+            {
+                <p class="btn btn-success p-1 rounded"> Order Delivered </p>
+            } 
+            else
+            {
+                <p class="btn btn-warning p-1 rounded"> Order Processing </p>
+            }
+
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Departure Date:  </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.DepatureDate?.ToString() </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h6> Arrival Date:  </h6>
+        </div>
+        <div class="col-sm-6">
+            <p> @Model?.ArrivalDate?.ToString() </p>
+        </div>
+
+    </div>
+</div>  

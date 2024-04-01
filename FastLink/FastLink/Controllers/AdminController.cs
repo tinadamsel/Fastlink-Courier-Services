@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace FastLink.Controllers
 {
-	public class AdminController : Controller
-	{
-		private readonly AppDbContext _context;
-		private SignInManager<ApplicationUser> _signInManager;
+    public class AdminController : Controller
+    {
+        private readonly AppDbContext _context;
+        private SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
         private readonly IUserHelper _userHelper;
         public AdminController(AppDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IUserHelper userHelper)
@@ -23,7 +23,7 @@ namespace FastLink.Controllers
         }
         [HttpGet]
         public IActionResult Index()
-		{
+        {
             var trackings = _userHelper.GetTotalTrackingId();
             var clients = _userHelper.GetTotalClients();
             var messages = _userHelper.GetTotalMessages();
@@ -33,13 +33,13 @@ namespace FastLink.Controllers
             var model = new ApplicationUserViewModel()
             {
                 TotalTrackIds = trackings,
-                TotalClients= clients,
+                TotalClients = clients,
                 TotalMessages = messages,
                 TrackIds = listOftrackids,
                 Messages = listOfMsgs,
             };
-			return View(model);
-		}
+            return View(model);
+        }
         [HttpPost]
         public JsonResult GenerateId(string trackDetails)
         {
@@ -56,30 +56,14 @@ namespace FastLink.Controllers
                     var generateID = _userHelper.GenerateID(trackViewModel);
                     if (generateID != null)
                     {
-                       var trackingID =  generateID.TrackingID;
-                       return Json(trackingID);
-                       //return Json(new { isError = false, msg = " Successful, Your Tracking ID is " + trackingID + ". Please copy out your Tracking ID." });
+                        var trackingID = generateID.TrackingID;
+                        return Json(trackingID);
+                        //return Json(new { isError = false, msg = " Successful, Your Tracking ID is " + trackingID + ". Please copy out your Tracking ID." });
                     }
                 }
-               return Json(new { isError = true, msg = " Could not generate ID" });
+                return Json(new { isError = true, msg = " Could not generate ID" });
             }
             return Json(new { isError = true, msg = " Network Failure" });
-        }
-
-        [HttpGet]
-        public JsonResult GetCurrentLocation(string trackingID)
-        {
-            if (trackingID != null)
-            {
-                var location = _userHelper.GetCurrentLocation(trackingID);
-                if (location != null)
-                {
-                    //return Json(location);
-                    return Json(new { isError = false, msg = " Your Goods/Consignment is currently at " + location + ". Thank you for choosing us." });
-                }
-                return Json(new { isError = true, msg = " Your item is yet to be moved, Please exercise some patience. Thank you" });
-            }
-            return Json( new { isError = true, msg = "Tracking ID not found"});
         }
 
         [HttpGet]
@@ -105,16 +89,21 @@ namespace FastLink.Controllers
         }
 
         [HttpPost]
-        public JsonResult ChangeCurrentLocation(int id, string trackID, string newLocation)
+        public JsonResult ChangeCurrentLocation(int id, string trackID, string details)
         {
-            if (id > 0 && trackID != null && newLocation != null)
+            if (id > 0 && trackID != null && details != null)
             {
-                var updateLocation = _userHelper.ChangeCurrentLocation(id, trackID, newLocation);
-                if (updateLocation)
+                var trackViewModel = JsonConvert.DeserializeObject<TrackingViewModel>(details);
+                if (trackViewModel != null)
                 {
-                    return Json(new { isError = false, msg = " Location Changed Successfully" });
+                    var updateLocation = _userHelper.ChangeCurrentLocation(id, trackID, trackViewModel);
+                    if (updateLocation)
+                    {
+                        return Json(new { isError = false, msg = "Track Details Updated Successfully" });
+                    }
+                    return Json(new { isError = true, msg = " Could not update" });
                 }
-                return Json(new { isError = true, msg = " Could not update" });
+
             }
             return Json(new { isError = true, msg = " Network Failure" });
 
@@ -151,7 +140,7 @@ namespace FastLink.Controllers
                     var createContact = _userHelper.CreateContactMsg(contactViewModel);
                     if (createContact)
                     {
-                        return Json(new { isError = false, msg = "Message sent successfully. Thank you for reaching out."});
+                        return Json(new { isError = false, msg = "Message sent successfully. Thank you for reaching out." });
                     }
                 }
                 return Json(new { isError = true, msg = " Could not send message" });
@@ -187,6 +176,58 @@ namespace FastLink.Controllers
             return Json(new { isError = true, msg = " Could not find msg to delete" });
         }
 
+        //newly added
+        [HttpPost]
+        public JsonResult DeliverTrack(int id)
+        {
+            if (id > 0)
+            {
+                var checkIfPaused = _userHelper.CheckIfPaused(id);
+                if (checkIfPaused)
+                {
+                    return Json(new { isError = true, msg = " Order is still paused" });
+                }
+                var deliverTrack = _userHelper.DeliverTrack(id);
+                if (deliverTrack)
+                {
+                    return Json(new { isError = false, msg = " Order set to delivered" });
+                }
+            }
+            return Json(new { isError = true, msg = " Could not find order" });
+        }
+
+        [HttpPost]
+        public JsonResult PauseOrder(int id)
+        {
+            if (id > 0)
+            {
+                var checkIfDelivered = _userHelper.CheckIfDelivered(id);
+                if (checkIfDelivered)
+                {
+                    return Json(new { isError = true, msg = " Order has been delivered" });
+                }
+                var pause = _userHelper.PauseOrder(id);
+                if (pause)
+                {
+                    return Json(new { isError = false, msg = " This Order has been paused" });
+                }
+            }
+            return Json(new { isError = true, msg = " Could not find order" });
+        }
+
+        public JsonResult RemovePause(int id)
+        {
+            if (id > 0)
+            {
+                var removePause = _userHelper.RemovePauseOrder(id);
+                if (removePause)
+                {
+                    return Json(new { isError = false, msg = " This Order is no longer paused" });
+                }
+            }
+            return Json(new { isError = true, msg = " Could not find order" });
+
+        }
 
 
     }
